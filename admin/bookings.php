@@ -106,6 +106,7 @@ $stats = $stats_stmt->fetch(PDO::FETCH_ASSOC);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -117,21 +118,26 @@ $stats = $stats_stmt->fetch(PDO::FETCH_ASSOC);
             min-height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
+
         .stats-card {
             border: none;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s;
         }
+
         .stats-card:hover {
             transform: translateY(-5px);
         }
+
         .booking-row {
             transition: background-color 0.3s;
         }
+
         .booking-row:hover {
             background-color: #f8f9fa;
         }
+
         .filter-section {
             background: #f8f9fa;
             border-radius: 10px;
@@ -140,6 +146,7 @@ $stats = $stats_stmt->fetch(PDO::FETCH_ASSOC);
         }
     </style>
 </head>
+
 <body>
     <div class="container-fluid">
         <div class="row">
@@ -150,7 +157,7 @@ $stats = $stats_stmt->fetch(PDO::FETCH_ASSOC);
                         <i class="fas fa-user-shield fa-2x mb-2"></i>
                         <h5><?php echo $_SESSION['admin_name']; ?></h5>
                     </div>
-                    
+
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link text-white" href="dashboard.php">
@@ -328,13 +335,13 @@ $stats = $stats_stmt->fetch(PDO::FETCH_ASSOC);
                             </button>
                         </div>
                     </form>
-                    
+
                     <?php if (!empty($search) || !empty($status_filter) || !empty($payment_filter) || !empty($date_from) || !empty($date_to)) { ?>
-                    <div class="mt-3">
-                        <a href="bookings.php" class="btn btn-outline-secondary btn-sm">
-                            <i class="fas fa-times me-1"></i>Clear Filters
-                        </a>
-                    </div>
+                        <div class="mt-3">
+                            <a href="bookings.php" class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-times me-1"></i>Clear Filters
+                            </a>
+                        </div>
                     <?php } ?>
                 </div>
 
@@ -351,85 +358,83 @@ $stats = $stats_stmt->fetch(PDO::FETCH_ASSOC);
                                         <th>Passengers</th>
                                         <th>Amount</th>
                                         <th>Status</th>
-                                        <th>Payment</th>
+                                        <!-- <th>Payment</th> -->
                                         <th>Booking Date</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php while($booking = $stmt->fetch(PDO::FETCH_ASSOC)) { ?>
-                                    <tr class="booking-row">
-                                        <td>
-                                            <strong><?php echo $booking['booking_reference']; ?></strong>
-                                            <?php if($booking['processed_by_name']) { ?>
-                                            <br><small class="text-muted">by <?php echo $booking['processed_by_name']; ?></small>
-                                            <?php } ?>
-                                        </td>
-                                        <td>
-                                            <strong><?php echo $booking['full_name']; ?></strong>
-                                            <br>
-                                            <small class="text-muted"><?php echo $booking['email']; ?></small>
-                                            <br>
-                                            <small class="text-muted"><?php echo $booking['phone']; ?></small>
-                                        </td>
-                                        <td>
-                                            <strong><?php echo $booking['tour_name']; ?></strong>
-                                            <br>
-                                            <small class="text-muted">
-                                                <i class="fas fa-map-marker-alt me-1"></i><?php echo $booking['location_name']; ?>
-                                            </small>
-                                            <br>
-                                            <small class="text-muted">
-                                                <i class="fas fa-calendar me-1"></i>
-                                                <?php echo date('M d', strtotime($booking['departure_date'])); ?> - 
-                                                <?php echo date('M d, Y', strtotime($booking['return_date'])); ?>
-                                            </small>
-                                        </td>
-                                        <td class="text-center">
-                                            <span class="badge bg-info"><?php echo $booking['number_of_passengers']; ?></span>
-                                        </td>
-                                        <td class="text-success fw-bold">
-                                            <?php echo number_format($booking['total_amount'], 2); ?> MMK
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-<?php 
-                                                echo $booking['booking_status'] == 'Confirmed' ? 'success' : 
-                                                    ($booking['booking_status'] == 'Pending' ? 'warning' : 'danger'); 
-                                            ?>">
-                                                <?php echo $booking['booking_status']; ?>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-<?php 
-                                                echo $booking['payment_status'] == 'Paid' ? 'success' : 
-                                                    ($booking['payment_status'] == 'Pending' ? 'secondary' : 'info'); 
-                                            ?>">
-                                                <?php echo $booking['payment_status']; ?>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <?php echo date('M d, Y', strtotime($booking['booking_date'])); ?>
-                                            <br>
-                                            <small class="text-muted"><?php echo date('H:i', strtotime($booking['booking_date'])); ?></small>
-                                        </td>
-                                        <td>
-                                            <div class="btn-group-vertical">
-                                                <button class="btn btn-outline-info btn-sm" onclick="viewBookingDetails(<?php echo htmlspecialchars(json_encode($booking)); ?>)">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                                <?php if($booking['booking_status'] == 'Pending') { ?>
-                                                <a href="booking-approvals.php" class="btn btn-outline-warning btn-sm">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
+                                    <?php while ($booking = $stmt->fetch(PDO::FETCH_ASSOC)) { ?>
+                                        <tr class="booking-row">
+                                            <td>
+                                                <strong><?php echo $booking['booking_reference']; ?></strong>
+                                                <?php if ($booking['processed_by_name']) { ?>
+                                                    <br><small class="text-muted">by <?php echo $booking['processed_by_name']; ?></small>
                                                 <?php } ?>
-                                                <a href="?delete_id=<?php echo $booking['id']; ?>" 
-                                                    class="btn btn-outline-danger btn-sm"
-                                                    onclick="return confirm('Are you sure you want to delete this booking?');">
+                                            </td>
+                                            <td>
+                                                <strong><?php echo $booking['full_name']; ?></strong>
+                                                <br>
+                                                <small class="text-muted"><?php echo $booking['email']; ?></small>
+                                                <br>
+                                                <small class="text-muted"><?php echo $booking['phone']; ?></small>
+                                            </td>
+                                            <td>
+                                                <strong><?php echo $booking['tour_name']; ?></strong>
+                                                <br>
+                                                <small class="text-muted">
+                                                    <i class="fas fa-map-marker-alt me-1"></i><?php echo $booking['location_name']; ?>
+                                                </small>
+                                                <br>
+                                                <small class="text-muted">
+                                                    <i class="fas fa-calendar me-1"></i>
+                                                    <?php echo date('M d', strtotime($booking['departure_date'])); ?> -
+                                                    <?php echo date('M d, Y', strtotime($booking['return_date'])); ?>
+                                                </small>
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="badge bg-info"><?php echo $booking['number_of_passengers']; ?></span>
+                                            </td>
+                                            <td class="text-success fw-bold">
+                                                <?php echo number_format($booking['total_amount'], 2); ?> MMK
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-<?php
+                                                                        echo $booking['booking_status'] == 'Confirmed' ? 'success' : ($booking['booking_status'] == 'Pending' ? 'warning' : 'danger');
+                                                                        ?>">
+                                                    <?php echo $booking['booking_status']; ?>
+                                                </span>
+                                            </td>
+                                            <!-- <td>
+                                                <span class="badge bg-<?php
+                                                                        echo $booking['payment_status'] == 'Paid' ? 'success' : ($booking['payment_status'] == 'Pending' ? 'secondary' : 'info');
+                                                                        ?>">
+                                                    <?php echo $booking['payment_status']; ?>
+                                                </span>
+                                            </td> -->
+                                            <td>
+                                                <?php echo date('M d, Y', strtotime($booking['booking_date'])); ?>
+                                                <br>
+                                                <small class="text-muted"><?php echo date('H:i', strtotime($booking['booking_date'])); ?></small>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group-vertical">
+                                                    <button class="btn btn-outline-info btn-sm" onclick="viewBookingDetails(<?php echo htmlspecialchars(json_encode($booking)); ?>)">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <?php if ($booking['booking_status'] == 'Pending') { ?>
+                                                        <a href="booking-approvals.php" class="btn btn-outline-warning btn-sm">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                    <?php } ?>
+                                                    <a href="?delete_id=<?php echo $booking['id']; ?>"
+                                                        class="btn btn-outline-danger btn-sm"
+                                                        onclick="return confirm('Are you sure you want to delete this booking?');">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                                </div>
+                                            </td>
+                                        </tr>
                                     <?php } ?>
                                 </tbody>
                             </table>
@@ -438,28 +443,40 @@ $stats = $stats_stmt->fetch(PDO::FETCH_ASSOC);
                 </div>
 
                 <!-- Pagination -->
-                <?php if($total_pages > 1) { ?>
-                <nav aria-label="Bookings pagination" class="mt-4">
-                    <ul class="pagination justify-content-center">
-                        <?php if($page > 1) { ?>
-                        <li class="page-item">
-                            <a class="page-link" href="?page=<?php echo $page-1; ?><?php echo http_build_query(array_filter($_GET, function($key) { return $key != 'page'; }, ARRAY_FILTER_USE_KEY)) ? '&' . http_build_query(array_filter($_GET, function($key) { return $key != 'page'; }, ARRAY_FILTER_USE_KEY)) : ''; ?>">Previous</a>
-                        </li>
-                        <?php } ?>
-                        
-                        <?php for($i = max(1, $page-2); $i <= min($total_pages, $page+2); $i++) { ?>
-                        <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
-                            <a class="page-link" href="?page=<?php echo $i; ?><?php echo http_build_query(array_filter($_GET, function($key) { return $key != 'page'; }, ARRAY_FILTER_USE_KEY)) ? '&' . http_build_query(array_filter($_GET, function($key) { return $key != 'page'; }, ARRAY_FILTER_USE_KEY)) : ''; ?>"><?php echo $i; ?></a>
-                        </li>
-                        <?php } ?>
-                        
-                        <?php if($page < $total_pages) { ?>
-                        <li class="page-item">
-                            <a class="page-link" href="?page=<?php echo $page+1; ?><?php echo http_build_query(array_filter($_GET, function($key) { return $key != 'page'; }, ARRAY_FILTER_USE_KEY)) ? '&' . http_build_query(array_filter($_GET, function($key) { return $key != 'page'; }, ARRAY_FILTER_USE_KEY)) : ''; ?>">Next</a>
-                        </li>
-                        <?php } ?>
-                    </ul>
-                </nav>
+                <?php if ($total_pages > 1) { ?>
+                    <nav aria-label="Bookings pagination" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            <?php if ($page > 1) { ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $page - 1; ?><?php echo http_build_query(array_filter($_GET, function ($key) {
+                                                                                                    return $key != 'page';
+                                                                                                }, ARRAY_FILTER_USE_KEY)) ? '&' . http_build_query(array_filter($_GET, function ($key) {
+                                                                                                    return $key != 'page';
+                                                                                                }, ARRAY_FILTER_USE_KEY)) : ''; ?>">Previous</a>
+                                </li>
+                            <?php } ?>
+
+                            <?php for ($i = max(1, $page - 2); $i <= min($total_pages, $page + 2); $i++) { ?>
+                                <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
+                                    <a class="page-link" href="?page=<?php echo $i; ?><?php echo http_build_query(array_filter($_GET, function ($key) {
+                                                                                            return $key != 'page';
+                                                                                        }, ARRAY_FILTER_USE_KEY)) ? '&' . http_build_query(array_filter($_GET, function ($key) {
+                                                                                            return $key != 'page';
+                                                                                        }, ARRAY_FILTER_USE_KEY)) : ''; ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php } ?>
+
+                            <?php if ($page < $total_pages) { ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $page + 1; ?><?php echo http_build_query(array_filter($_GET, function ($key) {
+                                                                                                    return $key != 'page';
+                                                                                                }, ARRAY_FILTER_USE_KEY)) ? '&' . http_build_query(array_filter($_GET, function ($key) {
+                                                                                                    return $key != 'page';
+                                                                                                }, ARRAY_FILTER_USE_KEY)) : ''; ?>">Next</a>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </nav>
                 <?php } ?>
             </main>
         </div>
@@ -509,9 +526,7 @@ $stats = $stats_stmt->fetch(PDO::FETCH_ASSOC);
                             <tr><td><strong>Status:</strong></td><td>
                                 <span class="badge bg-${bookingData.booking_status === 'Confirmed' ? 'success' : (bookingData.booking_status === 'Pending' ? 'warning' : 'danger')}">${bookingData.booking_status}</span>
                             </td></tr>
-                            <tr><td><strong>Payment:</strong></td><td>
-                                <span class="badge bg-${bookingData.payment_status === 'Paid' ? 'success' : 'secondary'}">${bookingData.payment_status}</span>
-                            </td></tr>
+                         
                             ${bookingData.processed_by_name ? `<tr><td><strong>Processed By:</strong></td><td>${bookingData.processed_by_name}</td></tr>` : ''}
                         </table>
                     </div>
@@ -542,10 +557,11 @@ $stats = $stats_stmt->fetch(PDO::FETCH_ASSOC);
                 </div>
                 ` : ''}
             `;
-            
+
             document.getElementById('bookingDetailsContent').innerHTML = content;
             new bootstrap.Modal(document.getElementById('bookingDetailsModal')).show();
         }
     </script>
 </body>
+
 </html>

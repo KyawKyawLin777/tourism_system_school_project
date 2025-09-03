@@ -113,8 +113,8 @@ if (!$tour_details) {
             <h3 class="text-center"><?php echo htmlspecialchars($tour_details['tour_name']); ?></h3>
             <p class="text-center">
               <!-- <span class="badge bg-<?php echo $tour_details['package_type'] == 'Single' ? 'warning' : 'info'; ?>"> -->
-              <?php echo htmlspecialchars($tour_details['package_type']); ?> Package
-              </span>
+              <!-- <?php echo htmlspecialchars($tour_details['package_type']); ?> Package
+              </span> -->
             </p>
 
             <div class="text-center mb-4">
@@ -165,11 +165,12 @@ if (!$tour_details) {
               <div class="mb-3">
                 <label for="payment_method" class="form-label">Payment Method</label>
                 <select name="payment_method" id="payment_method" class="form-control">
-                  <option value="K Pay">K Pay</option>
-                  <option value="Aya Bank">Aya Bank</option>
-                  <option value="KBZ Bank">KBZ Bank</option>
-                  <option value="UAB Bank">UAB Bank</option>
+                  <option value="K Pay">K Pay - +959123456789</option>
+                  <option value="Aya Bank">Aya Bank - 01456789012</option>
+                  <option value="KBZ Bank">KBZ Bank - 09987654321</option>
+                  <option value="UAB Bank">UAB Bank - 0551234567</option>
                   <option value="Other">Other</option>
+
                 </select>
               </div>
 
@@ -199,6 +200,16 @@ if (!$tour_details) {
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Calculate total price dynamically
+    document.getElementById('passengers').addEventListener('change', function() {
+      const passengers = parseInt(this.value) || 0;
+      const pricePerPerson = <?php echo $tour_details['price']; ?>;
+      const totalPrice = passengers * pricePerPerson;
+
+      // You can add a total price display here if needed
+    });
+  </script>
 </body>
 
 </html>

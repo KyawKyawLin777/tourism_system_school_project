@@ -141,16 +141,7 @@ if (!$tour_details) {
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Calculate total price dynamically
-        document.getElementById('passengers').addEventListener('change', function() {
-            const passengers = parseInt(this.value) || 0;
-            const pricePerPerson = <?php echo $tour_details['price']; ?>;
-            const totalPrice = passengers * pricePerPerson;
 
-            // You can add a total price display here if needed
-        });
-    </script>
 </body>
 
 </html>

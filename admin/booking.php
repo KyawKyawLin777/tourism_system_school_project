@@ -485,7 +485,7 @@ try {
                                             <th>Passengers</th>
                                             <th>Amount</th>
                                             <th>Status</th>
-                                            <th>Payment</th>
+                                            <!-- <th>Payment</th> -->
                                             <th>Booking Date</th>
                                             <th>Payment Method</th>
                                             <th>Payment Image</th>
@@ -536,13 +536,13 @@ try {
                                                         <?php echo htmlspecialchars($booking['booking_status']); ?>
                                                     </span>
                                                 </td>
-                                                <td>
+                                                <!-- <td>
                                                     <span class="badge bg-<?php
                                                                             echo $booking['payment_status'] == 'Paid' ? 'success' : ($booking['payment_status'] == 'Pending' ? 'secondary' : 'info');
                                                                             ?>">
                                                         <?php echo htmlspecialchars($booking['payment_status']); ?>
                                                     </span>
-                                                </td>
+                                                </td> -->
                                                 <td>
                                                     <?php echo date('M d, Y', strtotime($booking['booking_date'])); ?>
                                                     <br>
@@ -721,9 +721,7 @@ try {
                             <tr><td><strong>Status:</strong></td><td>
                                 <span class="badge bg-${bookingData.booking_status === 'Confirmed' ? 'success' : (bookingData.booking_status === 'Pending' ? 'warning' : 'danger')}">${bookingData.booking_status}</span>
                             </td></tr>
-                            <tr><td><strong>Payment:</strong></td><td>
-                                <span class="badge bg-${bookingData.payment_status === 'Paid' ? 'success' : 'secondary'}">${bookingData.payment_status}</span>
-                            </td></tr>
+                            
                             ${bookingData.processed_by_name ? `<tr><td><strong>Processed By:</strong></td><td>${bookingData.processed_by_name}</td></tr>` : ''}
                         </table>
                     </div>
