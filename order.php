@@ -111,7 +111,7 @@ try {
   </nav>
 
   <!-- Bookings Table -->
-  <div class="container my-5">
+  <div class="container-fluid my-5">
     <h3 class="mb-4">All Bookings</h3>
     <div class="table-responsive">
       <table class="table table-hover table-striped align-middle text-center">
@@ -123,6 +123,7 @@ try {
             <th>Passengers</th>
             <th>Total Amount</th>
             <th>Status</th>
+            <th>Message</th>
             <th>Date</th>
             <th>Payment Method</th>
             <th>Payment Image</th>
@@ -159,7 +160,9 @@ try {
                     <span class="badge bg-danger">Reject</span>
                   <?php endif; ?>
                 </td>
-
+                <td>
+                  <?php echo htmlspecialchars($b['admin_notes'] ?? ''); ?>
+                </td>
                 <td><?php echo date('M d, Y H:i', strtotime($b['booking_date'])); ?></td>
                 <td><?php echo htmlspecialchars($b['payment_method']); ?></td>
                 <td>

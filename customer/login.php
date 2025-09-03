@@ -169,8 +169,12 @@ if ($_POST) {
                                                 <i class="fas fa-phone me-2"></i>Phone Number
                                             </label>
                                             <input type="tel" class="form-control" id="phone"
-                                                name="phone" required>
+                                                name="phone" maxlength="11"
+                                                oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+                                                required>
+                                            <div class="form-text text-danger">Please enter up to 11 digits only.</div>
                                         </div>
+
 
                                         <div class="mb-3">
                                             <label for="address" class="form-label">

@@ -146,10 +146,13 @@ if (!$tour_details) {
                 <label for="email" class="form-label">Email</label>
                 <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($_SESSION['customer_email']); ?>" required>
               </div>
-
               <div class="mb-3">
                 <label for="phone" class="form-label">Phone</label>
-                <input type="tel" class="form-control" id="phone" name="phone" required>
+                <input type="tel" class="form-control" id="phone" name="phone"
+                  maxlength="11" pattern="[0-9]{1,11}"
+                  oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+                  required>
+                <div class="form-text text-danger">Please enter up to 11 digits only.</div>
               </div>
 
               <div class="mb-4">
