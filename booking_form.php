@@ -112,8 +112,8 @@ if (!$tour_details) {
             <!-- Tour Name & Package -->
             <h3 class="text-center"><?php echo htmlspecialchars($tour_details['tour_name']); ?></h3>
             <p class="text-center">
-              <span class="badge bg-<?php echo $tour_details['package_type'] == 'Single' ? 'warning' : 'info'; ?>">
-                <?php echo htmlspecialchars($tour_details['package_type']); ?> Package
+              <!-- <span class="badge bg-<?php echo $tour_details['package_type'] == 'Single' ? 'warning' : 'info'; ?>"> -->
+              <?php echo htmlspecialchars($tour_details['package_type']); ?> Package
               </span>
             </p>
 
@@ -122,7 +122,7 @@ if (!$tour_details) {
               <p class="text-muted">per person</p>
             </div>
 
-            <form action="booking.php" method="POST">
+            <form action="booking_post.php" method="POST" enctype="multipart/form-data">
               <input type="hidden" name="tour_id" value="<?php echo $tour_details['id']; ?>">
               <input type="hidden" name="price" value="<?php echo $tour_details['price']; ?>">
 
@@ -155,6 +155,22 @@ if (!$tour_details) {
               <div class="mb-4">
                 <label for="address" class="form-label">Address</label>
                 <textarea class="form-control" id="address" name="address" rows="2" required></textarea>
+              </div>
+
+              <div class="mb-3">
+                <label for="payment_image" class="form-label">Payment Image</label>
+                <input type="file" class="form-control" id="payment_image" name="payment_image" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="payment_method" class="form-label">Payment Method</label>
+                <select name="payment_method" id="payment_method" class="form-control">
+                  <option value="K Pay">K Pay</option>
+                  <option value="Aya Bank">Aya Bank</option>
+                  <option value="KBZ Bank">KBZ Bank</option>
+                  <option value="UAB Bank">UAB Bank</option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
 
               <div class="d-grid">

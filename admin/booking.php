@@ -487,6 +487,7 @@ try {
                                             <th>Status</th>
                                             <th>Payment</th>
                                             <th>Booking Date</th>
+                                            <th>Payment Method</th>
                                             <th>Payment Image</th>
                                             <th>Actions</th>
                                         </tr>
@@ -547,6 +548,7 @@ try {
                                                     <br>
                                                     <small class="text-muted"><?php echo date('H:i', strtotime($booking['booking_date'])); ?></small>
                                                 </td>
+                                                <td> <?php echo htmlspecialchars($booking['payment_method']); ?></td>
                                                 <td>
                                                     <?php if (!empty($booking['payment_image'])): ?>
                                                         <a href="../<?php echo htmlspecialchars($booking['payment_image']); ?>" target="_blank">

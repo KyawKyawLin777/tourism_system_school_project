@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 02, 2025 at 06:08 PM
+-- Generation Time: Sep 03, 2025 at 03:18 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.2.28
 
@@ -29,12 +29,12 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `admins` (
   `id` int NOT NULL,
-  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `full_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `role` enum('Super Admin','Admin','Manager') COLLATE utf8mb4_general_ci DEFAULT 'Admin',
-  `status` enum('Active','Inactive') COLLATE utf8mb4_general_ci DEFAULT 'Active',
+  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `full_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `role` enum('Super Admin','Admin','Manager') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'Admin',
+  `status` enum('Active','Inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'Active',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -54,15 +54,16 @@ INSERT INTO `admins` (`id`, `username`, `email`, `password`, `full_name`, `role`
 
 CREATE TABLE `bookings` (
   `id` int NOT NULL,
-  `booking_reference` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `booking_reference` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `customer_id` int DEFAULT NULL,
   `tour_id` int DEFAULT NULL,
   `number_of_passengers` int DEFAULT '1',
   `total_amount` decimal(10,2) DEFAULT NULL,
-  `payment_image` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `booking_status` enum('Pending','Confirmed','Cancelled') COLLATE utf8mb4_general_ci DEFAULT 'Pending',
-  `payment_status` enum('Pending','Paid','Refunded') COLLATE utf8mb4_general_ci DEFAULT 'Pending',
-  `admin_notes` text COLLATE utf8mb4_general_ci,
+  `payment_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `payment_method` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `booking_status` enum('Pending','Confirmed','Cancelled') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'Pending',
+  `payment_status` enum('Pending','Paid','Refunded') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'Pending',
+  `admin_notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `processed_by` int DEFAULT NULL,
   `processed_at` timestamp NULL DEFAULT NULL,
   `booking_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -72,12 +73,12 @@ CREATE TABLE `bookings` (
 -- Dumping data for table `bookings`
 --
 
-INSERT INTO `bookings` (`id`, `booking_reference`, `customer_id`, `tour_id`, `number_of_passengers`, `total_amount`, `payment_image`, `booking_status`, `payment_status`, `admin_notes`, `processed_by`, `processed_at`, `booking_date`) VALUES
-(2, 'TUR202507061671', 2, 1, 3, 897.00, NULL, 'Confirmed', 'Pending', '', 1, '2025-07-06 04:01:27', '2025-07-06 03:47:40'),
-(3, 'TUR202507061920', 3, 1, 4, 1196.00, NULL, 'Confirmed', 'Pending', '', 1, '2025-07-06 12:06:33', '2025-07-06 06:56:40'),
-(4, 'TUR202507063232', 3, 1, 4, 1196.00, NULL, 'Confirmed', 'Pending', '', 1, '2025-07-06 12:06:36', '2025-07-06 06:56:40'),
-(5, 'TUR202508163559', 4, 7, 1, 60000.00, NULL, 'Confirmed', 'Pending', '', 1, '2025-08-16 04:09:56', '2025-08-16 04:02:16'),
-(6, 'TUR202508166087', 4, 7, 1, 60000.00, NULL, 'Confirmed', 'Pending', '', 1, '2025-08-16 04:09:46', '2025-08-16 04:03:16');
+INSERT INTO `bookings` (`id`, `booking_reference`, `customer_id`, `tour_id`, `number_of_passengers`, `total_amount`, `payment_image`, `payment_method`, `booking_status`, `payment_status`, `admin_notes`, `processed_by`, `processed_at`, `booking_date`) VALUES
+(2, 'TUR202507061671', 2, 1, 3, 897.00, NULL, NULL, 'Confirmed', 'Pending', '', 1, '2025-07-06 04:01:27', '2025-07-06 03:47:40'),
+(3, 'TUR202507061920', 3, 1, 4, 1196.00, NULL, NULL, 'Confirmed', 'Pending', '', 1, '2025-07-06 12:06:33', '2025-07-06 06:56:40'),
+(4, 'TUR202507063232', 3, 1, 4, 1196.00, NULL, NULL, 'Confirmed', 'Pending', '', 1, '2025-07-06 12:06:36', '2025-07-06 06:56:40'),
+(5, 'TUR202508163559', 4, 7, 1, 60000.00, NULL, NULL, 'Confirmed', 'Pending', '', 1, '2025-08-16 04:09:56', '2025-08-16 04:02:16'),
+(6, 'TUR202508166087', 4, 7, 1, 60000.00, NULL, NULL, 'Confirmed', 'Pending', '', 1, '2025-08-16 04:09:46', '2025-08-16 04:03:16');
 
 -- --------------------------------------------------------
 
@@ -87,9 +88,9 @@ INSERT INTO `bookings` (`id`, `booking_reference`, `customer_id`, `tour_id`, `nu
 
 CREATE TABLE `bus_types` (
   `id` int NOT NULL,
-  `type_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `type_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `capacity` int NOT NULL,
-  `amenities` text COLLATE utf8mb4_general_ci,
+  `amenities` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `price_per_km` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -110,13 +111,13 @@ INSERT INTO `bus_types` (`id`, `type_name`, `capacity`, `amenities`, `price_per_
 
 CREATE TABLE `customers` (
   `id` int NOT NULL,
-  `full_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `full_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `email_verified` tinyint(1) DEFAULT '0',
-  `verification_token` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `phone` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `address` text COLLATE utf8mb4_general_ci,
+  `verification_token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `address` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -139,7 +140,7 @@ INSERT INTO `customers` (`id`, `full_name`, `email`, `password`, `email_verified
 CREATE TABLE `customer_sessions` (
   `id` int NOT NULL,
   `customer_id` int NOT NULL,
-  `session_token` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `session_token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `expires_at` datetime NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -152,9 +153,9 @@ CREATE TABLE `customer_sessions` (
 
 CREATE TABLE `locations` (
   `id` int NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci,
-  `image_url` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `image_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -195,15 +196,15 @@ INSERT INTO `locations` (`id`, `name`, `description`, `image_url`, `created_at`)
 
 CREATE TABLE `packages` (
   `id` int NOT NULL,
-  `package_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `package_type` enum('Single','Double') COLLATE utf8mb4_general_ci NOT NULL,
+  `package_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `package_type` enum('Single','Double') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `location_id` int DEFAULT NULL,
   `duration_days` int NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci,
-  `includes` text COLLATE utf8mb4_general_ci,
-  `image_url` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `approval_status` enum('Pending','Approved','Rejected') COLLATE utf8mb4_general_ci DEFAULT 'Pending',
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `includes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `image_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `approval_status` enum('Pending','Approved','Rejected') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'Pending',
   `approved_by` int DEFAULT NULL,
   `approved_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -243,13 +244,13 @@ CREATE TABLE `package_registrations` (
   `registration_date` datetime DEFAULT CURRENT_TIMESTAMP,
   `preferred_date` date DEFAULT NULL,
   `number_of_passengers` int DEFAULT '1',
-  `special_requirements` text COLLATE utf8mb4_general_ci,
-  `registration_status` enum('Pending','Approved','Rejected','Cancelled') COLLATE utf8mb4_general_ci DEFAULT 'Pending',
-  `admin_notes` text COLLATE utf8mb4_general_ci,
+  `special_requirements` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `registration_status` enum('Pending','Approved','Rejected','Cancelled') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'Pending',
+  `admin_notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `processed_by` int DEFAULT NULL,
   `processed_at` datetime DEFAULT NULL,
   `total_estimated_cost` decimal(10,2) DEFAULT NULL,
-  `payment_status` enum('Pending','Partial','Paid','Refunded') COLLATE utf8mb4_general_ci DEFAULT 'Pending',
+  `payment_status` enum('Pending','Partial','Paid','Refunded') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'Pending',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -262,13 +263,13 @@ CREATE TABLE `package_registrations` (
 
 CREATE TABLE `tours` (
   `id` int NOT NULL,
-  `tour_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `tour_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `package_id` int DEFAULT NULL,
   `bus_type_id` int DEFAULT NULL,
   `departure_date` date DEFAULT NULL,
   `return_date` date DEFAULT NULL,
   `available_seats` int DEFAULT NULL,
-  `status` enum('Active','Completed','Cancelled') COLLATE utf8mb4_general_ci DEFAULT 'Active',
+  `status` enum('Active','Completed','Cancelled') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'Active',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

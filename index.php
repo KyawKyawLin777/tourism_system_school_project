@@ -178,7 +178,7 @@ $stmt = $tour->read();
                 ?>
                     <div class="col-lg-6 col-xl-4">
                         <div class="card destination-card h-100 position-relative">
-                            <span class="badge <?php echo $badge_class; ?> package-badge"><?php echo htmlspecialchars($package_type); ?></span>
+                            <!-- <span class="badge <?php echo $badge_class; ?> package-badge"><?php echo htmlspecialchars($package_type); ?></span> -->
 
                             <img src="<?php echo htmlspecialchars($image_url); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($package_name); ?>" style="height: 250px; object-fit: cover;">
 

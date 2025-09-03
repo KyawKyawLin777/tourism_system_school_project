@@ -16,9 +16,9 @@ $busType = new BusType($db);
 $message = '';
 
 // Handle form submissions
-if($_POST) {
-    if(isset($_POST['action'])) {
-        switch($_POST['action']) {
+if ($_POST) {
+    if (isset($_POST['action'])) {
+        switch ($_POST['action']) {
             case 'create':
                 $tour->tour_name = $_POST['tour_name'];
                 $tour->package_id = $_POST['package_id'];
@@ -26,14 +26,14 @@ if($_POST) {
                 $tour->departure_date = $_POST['departure_date'];
                 $tour->return_date = $_POST['return_date'];
                 $tour->available_seats = $_POST['available_seats'];
-                
-                if($tour->create()) {
+
+                if ($tour->create()) {
                     $message = '<div class="alert alert-success">Tour created successfully!</div>';
                 } else {
                     $message = '<div class="alert alert-danger">Failed to create tour.</div>';
                 }
                 break;
-                
+
             case 'update':
                 $tour->id = $_POST['id'];
                 $tour->tour_name = $_POST['tour_name'];
@@ -43,17 +43,17 @@ if($_POST) {
                 $tour->return_date = $_POST['return_date'];
                 $tour->available_seats = $_POST['available_seats'];
                 $tour->status = $_POST['status'];
-                
-                if($tour->update()) {
+
+                if ($tour->update()) {
                     $message = '<div class="alert alert-success">Tour updated successfully!</div>';
                 } else {
                     $message = '<div class="alert alert-danger">Failed to update tour.</div>';
                 }
                 break;
-                
+
             case 'delete':
                 $tour->id = $_POST['id'];
-                if($tour->delete()) {
+                if ($tour->delete()) {
                     $message = '<div class="alert alert-success">Tour deleted successfully!</div>';
                 } else {
                     $message = '<div class="alert alert-danger">Failed to delete tour. It may have existing bookings.</div>';
@@ -70,6 +70,7 @@ $bus_types_stmt = $busType->read();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -81,14 +82,17 @@ $bus_types_stmt = $busType->read();
             min-height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
+
         .tour-card {
             transition: transform 0.3s;
             border: none;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .tour-card:hover {
             transform: translateY(-3px);
         }
+
         .status-badge {
             position: absolute;
             top: 10px;
@@ -97,6 +101,7 @@ $bus_types_stmt = $busType->read();
         }
     </style>
 </head>
+
 <body>
     <div class="container-fluid">
         <div class="row">
@@ -107,7 +112,7 @@ $bus_types_stmt = $busType->read();
                         <i class="fas fa-user-shield fa-2x mb-2"></i>
                         <h5><?php echo $_SESSION['admin_name']; ?></h5>
                     </div>
-                    
+
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link text-white" href="dashboard.php">
@@ -119,11 +124,11 @@ $bus_types_stmt = $busType->read();
                                 <i class="fas fa-map-marker-alt me-2"></i>Locations
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link text-white" href="packages.php">
                                 <i class="fas fa-box me-2"></i>Packages
                             </a>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
                             <a class="nav-link text-white" href="package-approvals.php">
                                 <i class="fas fa-check-circle me-2"></i>Package Approvals
@@ -188,56 +193,55 @@ $bus_types_stmt = $busType->read();
 
                 <!-- Card View -->
                 <div id="cardView" class="row g-4">
-                    <?php while($row = $stmt->fetch(PDO::FETCH_ASSOC)) { ?>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card tour-card h-100 position-relative">
-                            <span class="badge bg-<?php 
-                                echo $row['status'] == 'Active' ? 'success' : 
-                                    ($row['status'] == 'Completed' ? 'info' : 'danger'); 
-                            ?> status-badge">
-                                <?php echo $row['status']; ?>
-                            </span>
-                         
-                            
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title"><?php echo $row['tour_name']; ?></h5>
-                                <p class="card-text text-muted">
-                                    <i class="fas fa-map-marker-alt me-1"></i><?php echo $row['location_name']; ?> • 
-                                    <i class="fas fa-clock me-1"></i><?php echo $row['duration_days']; ?> Days
-                                </p>
-                                <p class="card-text">
-                                    <small class="text-muted">
-                                        <i class="fas fa-calendar me-1"></i>
-                                        <?php echo date('M d', strtotime($row['departure_date'])); ?> - 
-                                        <?php echo date('M d, Y', strtotime($row['return_date'])); ?>
-                                    </small>
-                                </p>
-                                <p class="card-text">
-                                    <i class="fas fa-bus me-1"></i><?php echo $row['bus_type']; ?>
-                                </p>
-                                
-                                <div class="mt-auto">
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <span class="h5 text-primary mb-0"><?php echo number_format($row['price'], 2); ?> MMK</span>
+                    <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) { ?>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="card tour-card h-100 position-relative">
+                                <span class="badge bg-<?php
+                                                        echo $row['status'] == 'Active' ? 'success' : ($row['status'] == 'Completed' ? 'info' : 'danger');
+                                                        ?> status-badge">
+                                    <?php echo $row['status']; ?>
+                                </span>
+
+
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title"><?php echo $row['tour_name']; ?></h5>
+                                    <p class="card-text text-muted">
+                                        <i class="fas fa-map-marker-alt me-1"></i><?php echo $row['location_name']; ?> •
+                                        <i class="fas fa-clock me-1"></i><?php echo $row['duration_days']; ?> Days
+                                    </p>
+                                    <p class="card-text">
                                         <small class="text-muted">
-                                            <i class="fas fa-users me-1"></i><?php echo $row['available_seats']; ?> seats
+                                            <i class="fas fa-calendar me-1"></i>
+                                            <?php echo date('M d', strtotime($row['departure_date'])); ?> -
+                                            <?php echo date('M d, Y', strtotime($row['return_date'])); ?>
                                         </small>
-                                    </div>
-                                    <div class="btn-group w-100" role="group">
-                                        <button class="btn btn-outline-info btn-sm" onclick="viewTour(<?php echo htmlspecialchars(json_encode($row)); ?>)">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn btn-outline-primary btn-sm" onclick="editTour(<?php echo htmlspecialchars(json_encode($row)); ?>)">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-outline-danger btn-sm" onclick="deleteTour(<?php echo $row['id']; ?>, '<?php echo $row['tour_name']; ?>')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
+                                    </p>
+                                    <p class="card-text">
+                                        <i class="fas fa-bus me-1"></i><?php echo $row['bus_type']; ?>
+                                    </p>
+
+                                    <div class="mt-auto">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <span class="h5 text-primary mb-0"><?php echo number_format($row['price'], 2); ?> MMK</span>
+                                            <small class="text-muted">
+                                                <i class="fas fa-users me-1"></i><?php echo $row['available_seats']; ?> seats
+                                            </small>
+                                        </div>
+                                        <div class="btn-group w-100" role="group">
+                                            <button class="btn btn-outline-info btn-sm" onclick="viewTour(<?php echo htmlspecialchars(json_encode($row)); ?>)">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-outline-primary btn-sm" onclick="editTour(<?php echo htmlspecialchars(json_encode($row)); ?>)">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-outline-danger btn-sm" onclick="deleteTour(<?php echo $row['id']; ?>, '<?php echo $row['tour_name']; ?>')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     <?php } ?>
                 </div>
 
@@ -250,7 +254,7 @@ $bus_types_stmt = $busType->read();
                                     <tr>
                                         <th>ID</th>
                                         <th>Tour Name</th>
-                                        <th>Package</th>
+                                        <!-- <th>Package</th> -->
                                         <th>Location</th>
                                         <th>Dates</th>
                                         <th>Price</th>
@@ -260,54 +264,53 @@ $bus_types_stmt = $busType->read();
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php 
+                                    <?php
                                     // Reset statement for table view
                                     $stmt = $tour->readAll();
-                                    while($row = $stmt->fetch(PDO::FETCH_ASSOC)) { 
+                                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                     ?>
-                                    <tr>
-                                        <td><?php echo $row['id']; ?></td>
-                                        <td>
-                                            <strong><?php echo $row['tour_name']; ?></strong>
-                                            <br>
-                                            <small class="text-muted"><?php echo $row['bus_type']; ?></small>
-                                        </td>
-                                        <td>
-                                            <?php echo $row['package_name']; ?>
-                                            <br>
-                                            <span class="badge bg-<?php echo $row['package_type'] == 'Single' ? 'warning' : 'info'; ?>">
-                                                <?php echo $row['package_type']; ?>
-                                            </span>
-                                        </td>
-                                        <td><?php echo $row['location_name']; ?></td>
-                                        <td>
-                                            <?php echo date('M d', strtotime($row['departure_date'])); ?> - 
-                                            <?php echo date('M d, Y', strtotime($row['return_date'])); ?>
-                                        </td>
-                                        <td class="text-success fw-bold">$<?php echo number_format($row['price'], 2); ?></td>
-                                        <td>
-                                            <span class="badge bg-info"><?php echo $row['available_seats']; ?></span>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-<?php 
-                                                echo $row['status'] == 'Active' ? 'success' : 
-                                                    ($row['status'] == 'Completed' ? 'info' : 'danger'); 
-                                            ?>">
-                                                <?php echo $row['status']; ?>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline-info" onclick="viewTour(<?php echo htmlspecialchars(json_encode($row)); ?>)">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-primary" onclick="editTour(<?php echo htmlspecialchars(json_encode($row)); ?>)">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteTour(<?php echo $row['id']; ?>, '<?php echo $row['tour_name']; ?>')">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td><?php echo $row['id']; ?></td>
+                                            <td>
+                                                <strong><?php echo $row['tour_name']; ?></strong>
+                                                <br>
+                                                <small class="text-muted"><?php echo $row['bus_type']; ?></small>
+                                            </td>
+                                            <!-- <td>
+                                                <?php echo $row['package_name']; ?>
+                                                <br>
+                                                <span class="badge bg-<?php echo $row['package_type'] == 'Single' ? 'warning' : 'info'; ?>">
+                                                    <?php echo $row['package_type']; ?>
+                                                </span>
+                                            </td> -->
+                                            <td><?php echo $row['location_name']; ?></td>
+                                            <td>
+                                                <?php echo date('M d', strtotime($row['departure_date'])); ?> -
+                                                <?php echo date('M d, Y', strtotime($row['return_date'])); ?>
+                                            </td>
+                                            <td class="text-success fw-bold">$<?php echo number_format($row['price'], 2); ?></td>
+                                            <td>
+                                                <span class="badge bg-info"><?php echo $row['available_seats']; ?></span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-<?php
+                                                                        echo $row['status'] == 'Active' ? 'success' : ($row['status'] == 'Completed' ? 'info' : 'danger');
+                                                                        ?>">
+                                                    <?php echo $row['status']; ?>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-info" onclick="viewTour(<?php echo htmlspecialchars(json_encode($row)); ?>)">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-primary" onclick="editTour(<?php echo htmlspecialchars(json_encode($row)); ?>)">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="deleteTour(<?php echo $row['id']; ?>, '<?php echo $row['tour_name']; ?>')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
                                     <?php } ?>
                                 </tbody>
                             </table>
@@ -330,21 +333,21 @@ $bus_types_stmt = $busType->read();
                     <div class="modal-body">
                         <input type="hidden" name="action" id="formAction" value="create">
                         <input type="hidden" name="id" id="tourId">
-                        
+
                         <div class="mb-3">
                             <label for="tour_name" class="form-label">Tour Name</label>
                             <input type="text" class="form-control" id="tour_name" name="tour_name" required>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="package_id" class="form-label">Package</label>
                                     <select class="form-select" id="package_id" name="package_id" required>
                                         <option value="">Select Package</option>
-                                        <?php while($pkg = $packages_stmt->fetch(PDO::FETCH_ASSOC)) { ?>
+                                        <?php while ($pkg = $packages_stmt->fetch(PDO::FETCH_ASSOC)) { ?>
                                             <option value="<?php echo $pkg['id']; ?>" data-location="<?php echo $pkg['location_name']; ?>" data-type="<?php echo $pkg['package_type']; ?>">
-                                                <?php echo $pkg['package_name']; ?> (<?php echo $pkg['package_type']; ?>) - $<?php echo $pkg['price']; ?>
+                                                <?php echo $pkg['package_name']; ?> <?php echo $pkg['price']; ?>
                                             </option>
                                         <?php } ?>
                                     </select>
@@ -355,7 +358,7 @@ $bus_types_stmt = $busType->read();
                                     <label for="bus_type_id" class="form-label">Bus Type</label>
                                     <select class="form-select" id="bus_type_id" name="bus_type_id" required>
                                         <option value="">Select Bus Type</option>
-                                        <?php while($bus = $bus_types_stmt->fetch(PDO::FETCH_ASSOC)) { ?>
+                                        <?php while ($bus = $bus_types_stmt->fetch(PDO::FETCH_ASSOC)) { ?>
                                             <option value="<?php echo $bus['id']; ?>">
                                                 <?php echo $bus['type_name']; ?> (<?php echo $bus['capacity']; ?> seats)
                                             </option>
@@ -364,7 +367,7 @@ $bus_types_stmt = $busType->read();
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -379,7 +382,7 @@ $bus_types_stmt = $busType->read();
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -486,10 +489,10 @@ $bus_types_stmt = $busType->read();
             document.getElementById('available_seats').value = tourData.available_seats;
             document.getElementById('status').value = tourData.status;
             document.getElementById('submitBtn').textContent = 'Update Tour';
-            
+
             // Show status field for edit
             document.getElementById('statusDiv').style.display = 'block';
-            
+
             new bootstrap.Modal(document.getElementById('tourModal')).show();
         }
 
@@ -501,7 +504,7 @@ $bus_types_stmt = $busType->read();
                     </div>
                     <div class="col-md-6">
                         <h4>${tourData.tour_name}</h4>
-                        <p><strong>Package:</strong> ${tourData.package_name} (${tourData.package_type})</p>
+                      
                         <p><strong>Location:</strong> ${tourData.location_name}</p>
                         <p><strong>Duration:</strong> ${tourData.duration_days} days</p>
                         <p><strong>Price:</strong> $${parseFloat(tourData.price).toFixed(2)}</p>
@@ -527,7 +530,7 @@ $bus_types_stmt = $busType->read();
                     </div>
                 </div>
             `;
-            
+
             document.getElementById('viewContent').innerHTML = content;
             new bootstrap.Modal(document.getElementById('viewModal')).show();
         }
@@ -539,7 +542,7 @@ $bus_types_stmt = $busType->read();
         }
 
         // Reset form when modal is closed
-        document.getElementById('tourModal').addEventListener('hidden.bs.modal', function () {
+        document.getElementById('tourModal').addEventListener('hidden.bs.modal', function() {
             document.getElementById('tourForm').reset();
             document.getElementById('modalTitle').textContent = 'Add Tour';
             document.getElementById('formAction').value = 'create';
@@ -559,4 +562,5 @@ $bus_types_stmt = $busType->read();
         });
     </script>
 </body>
+
 </html>

@@ -114,7 +114,7 @@ try {
   <div class="container my-5">
     <h3 class="mb-4">All Bookings</h3>
     <div class="table-responsive">
-      <table class="table table-hover align-middle">
+      <table class="table table-hover table-striped align-middle text-center">
         <thead class="table-light">
           <tr>
             <th>Reference</th>
@@ -124,19 +124,19 @@ try {
             <th>Total Amount</th>
             <th>Status</th>
             <th>Date</th>
-            <th>Upload Image</th>
-            <th>Payment</th>
+            <th>Payment Method</th>
+            <th>Payment Image</th>
           </tr>
         </thead>
         <tbody>
           <?php if (empty($all_bookings)): ?>
             <tr>
-              <td colspan="8" class="text-center text-muted">No bookings found</td>
+              <td colspan="9" class="text-center text-muted py-4">No bookings found</td>
             </tr>
           <?php else: ?>
             <?php foreach ($all_bookings as $b): ?>
               <tr>
-                <td><?php echo htmlspecialchars($b['booking_reference']); ?></td>
+                <td class="fw-bold"><?php echo htmlspecialchars($b['booking_reference']); ?></td>
                 <td>
                   <?php echo htmlspecialchars($b['full_name']); ?><br>
                   <small class="text-muted"><?php echo htmlspecialchars($b['email']); ?></small>
@@ -149,57 +149,32 @@ try {
                   </small>
                 </td>
                 <td><?php echo intval($b['number_of_passengers']); ?></td>
-                <td><?php echo number_format($b['total_amount'], 2); ?> MMK</td>
+                <td class="text-end"><?php echo number_format($b['total_amount'], 2); ?> MMK</td>
                 <td>
                   <?php if ($b['booking_status'] == 'Pending'): ?>
                     <span class="badge bg-warning text-dark">Pending</span>
-                  <?php else: ?>
+                  <?php elseif ($b['booking_status'] == 'Confirmed'): ?>
                     <span class="badge bg-success">Confirmed</span>
+                  <?php else: ?>
+                    <span class="badge bg-danger">Reject</span>
                   <?php endif; ?>
                 </td>
+
                 <td><?php echo date('M d, Y H:i', strtotime($b['booking_date'])); ?></td>
+                <td><?php echo htmlspecialchars($b['payment_method']); ?></td>
                 <td>
                   <img src="<?php echo htmlspecialchars($b['payment_image']); ?>"
-                    class="card-img-top img-fluid"
-                    alt=""
-                    style="max-height: 100px; object-fit: cover;">
-                </td>
-                <td>
-                  <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#paymentModal<?php echo $b['id']; ?>">
-                    <i class="fas fa-image"></i> Upload Payment
-                  </button>
+                    class="img-fluid rounded shadow-sm"
+                    alt="Payment Image"
+                    style="max-height: 80px; object-fit: cover;">
                 </td>
               </tr>
-
-              <!-- Payment Modal -->
-              <div class="modal fade" id="paymentModal<?php echo $b['id']; ?>" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <form action="upload_payment.php" method="POST" enctype="multipart/form-data">
-                      <div class="modal-header">
-                        <h5 class="modal-title">Upload Payment Proof</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                      </div>
-                      <div class="modal-body">
-                        <input type="hidden" name="booking_id" value="<?php echo $b['id']; ?>">
-                        <div class="mb-3">
-                          <label for="payment_image<?php echo $b['id']; ?>" class="form-label">Select Image</label>
-                          <input type="file" class="form-control" id="payment_image<?php echo $b['id']; ?>" name="payment_image" accept="image/*" required onchange="previewImage(event, <?php echo $b['id']; ?>)">
-                          <img id="preview<?php echo $b['id']; ?>" class="img-fluid mt-3" style="display:none;" />
-                        </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Upload</button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
             <?php endforeach; ?>
           <?php endif; ?>
         </tbody>
       </table>
     </div>
+
   </div>
 
 

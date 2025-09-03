@@ -142,7 +142,7 @@ $locations_stmt->execute();
             ?>
                 <div class="col-lg-4 col-md-6">
                     <div class="card tour-card h-100 position-relative">
-                        <span class="badge <?php echo $badge_class; ?> package-badge"><?php echo $package_type; ?></span>
+                        <!-- <span class="badge <?php echo $badge_class; ?> package-badge"><?php echo $package_type; ?></span> -->
 
                         <img src="<?php echo htmlspecialchars($image_url); ?>" class="card-img-top" alt="<?php echo $tour_name; ?>" height="250px">
                         <div class="card-body d-flex flex-column">

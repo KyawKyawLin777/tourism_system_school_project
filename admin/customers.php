@@ -18,26 +18,26 @@ $records_per_page = 10;
 $offset = ($page - 1) * $records_per_page;
 
 // Handle form submissions
-if($_POST) {
-    if(isset($_POST['action'])) {
-        switch($_POST['action']) {
+if ($_POST) {
+    if (isset($_POST['action'])) {
+        switch ($_POST['action']) {
             case 'update':
                 $customer->id = $_POST['id'];
                 $customer->full_name = $_POST['full_name'];
                 $customer->email = $_POST['email'];
                 $customer->phone = $_POST['phone'];
                 $customer->address = $_POST['address'];
-                
-                if($customer->update()) {
+
+                if ($customer->update()) {
                     $message = '<div class="alert alert-success">Customer updated successfully!</div>';
                 } else {
                     $message = '<div class="alert alert-danger">Failed to update customer.</div>';
                 }
                 break;
-                
+
             case 'delete':
                 $customer->id = $_POST['id'];
-                if($customer->delete()) {
+                if ($customer->delete()) {
                     $message = '<div class="alert alert-success">Customer deleted successfully!</div>';
                 } else {
                     $message = '<div class="alert alert-danger">Failed to delete customer.</div>';
@@ -50,7 +50,7 @@ if($_POST) {
 // Build query with search
 $where_clause = '';
 $params = [];
-if(!empty($search)) {
+if (!empty($search)) {
     $where_clause = "WHERE full_name LIKE ? OR email LIKE ? OR phone LIKE ?";
     $search_param = "%$search%";
     $params = [$search_param, $search_param, $search_param];
@@ -59,7 +59,7 @@ if(!empty($search)) {
 // Get total records for pagination
 $count_query = "SELECT COUNT(*) as total FROM customers $where_clause";
 $count_stmt = $db->prepare($count_query);
-if(!empty($params)) {
+if (!empty($params)) {
     $count_stmt->execute($params);
 } else {
     $count_stmt->execute();
@@ -77,7 +77,7 @@ $query = "SELECT c.*,
           LIMIT $records_per_page OFFSET $offset";
 
 $stmt = $db->prepare($query);
-if(!empty($params)) {
+if (!empty($params)) {
     $stmt->execute($params);
 } else {
     $stmt->execute();
@@ -86,6 +86,7 @@ if(!empty($params)) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -97,19 +98,23 @@ if(!empty($params)) {
             min-height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
+
         .customer-card {
             transition: transform 0.3s;
             border: none;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .customer-card:hover {
             transform: translateY(-3px);
         }
+
         .stats-badge {
             font-size: 0.8rem;
         }
     </style>
 </head>
+
 <body>
     <div class="container-fluid">
         <div class="row">
@@ -120,7 +125,7 @@ if(!empty($params)) {
                         <i class="fas fa-user-shield fa-2x mb-2"></i>
                         <h5><?php echo $_SESSION['admin_name']; ?></h5>
                     </div>
-                    
+
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link text-white" href="dashboard.php">
@@ -185,10 +190,10 @@ if(!empty($params)) {
                             <button class="btn btn-outline-primary" type="submit">
                                 <i class="fas fa-search"></i>
                             </button>
-                            <?php if(!empty($search)) { ?>
-                            <a href="customers.php" class="btn btn-outline-secondary ms-2">
-                                <i class="fas fa-times"></i>
-                            </a>
+                            <?php if (!empty($search)) { ?>
+                                <a href="customers.php" class="btn btn-outline-secondary ms-2">
+                                    <i class="fas fa-times"></i>
+                                </a>
                             <?php } ?>
                         </form>
                     </div>
@@ -215,52 +220,53 @@ if(!empty($params)) {
                                         <th>Customer</th>
                                         <th>Contact</th>
                                         <th>Bookings</th>
-                                        <th>Total Spent</th>
+                                        <!-- <th>Total Spent</th> -->
                                         <th>Registered</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
-                                    <?php 
-                                     $no = 1; // start counter
-                                    while($row = $stmt->fetch(PDO::FETCH_ASSOC)) { ?>
-                                    <tr>
-                                        <td><?php echo $no; ?></td> 
-                                        <td>
-                                            <div>
-                                                <strong><?php echo $row['full_name']; ?></strong>
-                                                <br>
-                                                <small class="text-muted"><?php echo $row['email']; ?></small>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <i class="fas fa-phone text-primary me-1"></i><?php echo $row['phone']; ?>
-                                                <br>
-                                                <small class="text-muted"><?php echo substr($row['address'], 0, 30) . '...'; ?></small>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-info"><?php echo $row['total_bookings']; ?> bookings</span>
-                                        </td>
-                                        <td class="text-success fw-bold">
+
+                                    <?php
+                                    $no = 1; // start counter
+                                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) { ?>
+                                        <tr>
+                                            <td><?php echo $no; ?></td>
+                                            <td>
+                                                <div>
+                                                    <strong><?php echo $row['full_name']; ?></strong>
+                                                    <br>
+                                                    <small class="text-muted"><?php echo $row['email']; ?></small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <i class="fas fa-phone text-primary me-1"></i><?php echo $row['phone']; ?>
+                                                    <br>
+                                                    <small class="text-muted"><?php echo substr($row['address'], 0, 30) . '...'; ?></small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-info"><?php echo $row['total_bookings']; ?> bookings</span>
+                                            </td>
+                                            <!-- <td class="text-success fw-bold">
                                             <?php echo number_format($row['total_spent'] ?? 0, 2); ?> MMK
-                                        </td>
-                                        <td><?php echo date('M d, Y', strtotime($row['created_at'])); ?></td>
-                                        <td>
-                                            <button class="btn btn-sm btn-outline-info" onclick="viewCustomer(<?php echo htmlspecialchars(json_encode($row)); ?>)">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-primary" onclick="editCustomer(<?php echo htmlspecialchars(json_encode($row)); ?>)">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                           <button class="btn btn-sm btn-outline-danger" onclick="deleteCustomer(<?php echo $row['id']; ?>, '<?php echo $row['full_name']; ?>')">
-                                                <i class="fas fa-trash"></i>
-                                            </button> 
-                                        </td>
-                                    </tr>
-                                    <?php $no++; } ?>
+                                        </td> -->
+                                            <td><?php echo date('M d, Y', strtotime($row['created_at'])); ?></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-info" onclick="viewCustomer(<?php echo htmlspecialchars(json_encode($row)); ?>)">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-primary" onclick="editCustomer(<?php echo htmlspecialchars(json_encode($row)); ?>)">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="deleteCustomer(<?php echo $row['id']; ?>, '<?php echo $row['full_name']; ?>')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <?php $no++;
+                                    } ?>
                                 </tbody>
                             </table>
                         </div>
@@ -269,86 +275,86 @@ if(!empty($params)) {
 
                 <!-- Card View -->
                 <div id="cardView" class="row g-4" style="display: none;">
-                    <?php 
-                    
+                    <?php
+
                     // Reset statement for card view
                     $stmt = $db->prepare($query);
-                    if(!empty($params)) {
+                    if (!empty($params)) {
                         $stmt->execute($params);
                     } else {
                         $stmt->execute();
                     }
-                    while($row = $stmt->fetch(PDO::FETCH_ASSOC)) { 
+                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     ?>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card customer-card h-100">
-                            <div class="card-body text-center">
-                                <div class="mb-3">
-                                    <i class="fas fa-user-circle fa-4x text-primary"></i>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="card customer-card h-100">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <i class="fas fa-user-circle fa-4x text-primary"></i>
+                                    </div>
+
+                                    <h5 class="card-title"><?php echo $row['full_name']; ?></h5>
+                                    <p class="text-muted"><?php echo $row['email']; ?></p>
+
+                                    <div class="mb-3">
+                                        <span class="badge bg-info stats-badge"><?php echo $row['total_bookings']; ?> bookings</span>
+                                        <span class="badge bg-success stats-badge ms-1">$<?php echo number_format($row['total_spent'] ?? 0, 2); ?></span>
+                                    </div>
+
+                                    <p class="card-text">
+                                        <small class="text-muted">
+                                            <i class="fas fa-phone me-1"></i><?php echo $row['phone']; ?>
+                                        </small>
+                                    </p>
+
+                                    <p class="card-text">
+                                        <small class="text-muted">
+                                            <i class="fas fa-calendar me-1"></i>Joined <?php echo date('M Y', strtotime($row['created_at'])); ?>
+                                        </small>
+                                    </p>
                                 </div>
-                                
-                                <h5 class="card-title"><?php echo $row['full_name']; ?></h5>
-                                <p class="text-muted"><?php echo $row['email']; ?></p>
-                                
-                                <div class="mb-3">
-                                    <span class="badge bg-info stats-badge"><?php echo $row['total_bookings']; ?> bookings</span>
-                                    <span class="badge bg-success stats-badge ms-1">$<?php echo number_format($row['total_spent'] ?? 0, 2); ?></span>
-                                </div>
-                                
-                                <p class="card-text">
-                                    <small class="text-muted">
-                                        <i class="fas fa-phone me-1"></i><?php echo $row['phone']; ?>
-                                    </small>
-                                </p>
-                                
-                                <p class="card-text">
-                                    <small class="text-muted">
-                                        <i class="fas fa-calendar me-1"></i>Joined <?php echo date('M Y', strtotime($row['created_at'])); ?>
-                                    </small>
-                                </p>
-                            </div>
-                            
-                            <div class="card-footer bg-transparent">
-                                <div class="btn-group w-100" role="group">
-                                    <button class="btn btn-outline-info btn-sm" onclick="viewCustomer(<?php echo htmlspecialchars(json_encode($row)); ?>)">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn btn-outline-primary btn-sm" onclick="editCustomer(<?php echo htmlspecialchars(json_encode($row)); ?>)">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-outline-danger btn-sm" onclick="deleteCustomer(<?php echo $row['id']; ?>, '<?php echo $row['full_name']; ?>')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+
+                                <div class="card-footer bg-transparent">
+                                    <div class="btn-group w-100" role="group">
+                                        <button class="btn btn-outline-info btn-sm" onclick="viewCustomer(<?php echo htmlspecialchars(json_encode($row)); ?>)">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-outline-primary btn-sm" onclick="editCustomer(<?php echo htmlspecialchars(json_encode($row)); ?>)">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="deleteCustomer(<?php echo $row['id']; ?>, '<?php echo $row['full_name']; ?>')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     <?php } ?>
                 </div>
 
                 <!-- Pagination -->
-                <?php if($total_pages > 1) { ?>
-                <nav aria-label="Customer pagination" class="mt-4">
-                    <ul class="pagination justify-content-center">
-                        <?php if($page > 1) { ?>
-                        <li class="page-item">
-                            <a class="page-link" href="?page=<?php echo $page-1; ?><?php echo !empty($search) ? '&search='.urlencode($search) : ''; ?>">Previous</a>
-                        </li>
-                        <?php } ?>
-                        
-                        <?php for($i = max(1, $page-2); $i <= min($total_pages, $page+2); $i++) { ?>
-                        <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
-                            <a class="page-link" href="?page=<?php echo $i; ?><?php echo !empty($search) ? '&search='.urlencode($search) : ''; ?>"><?php echo $i; ?></a>
-                        </li>
-                        <?php } ?>
-                        
-                        <?php if($page < $total_pages) { ?>
-                        <li class="page-item">
-                            <a class="page-link" href="?page=<?php echo $page+1; ?><?php echo !empty($search) ? '&search='.urlencode($search) : ''; ?>">Next</a>
-                        </li>
-                        <?php } ?>
-                    </ul>
-                </nav>
+                <?php if ($total_pages > 1) { ?>
+                    <nav aria-label="Customer pagination" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            <?php if ($page > 1) { ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $page - 1; ?><?php echo !empty($search) ? '&search=' . urlencode($search) : ''; ?>">Previous</a>
+                                </li>
+                            <?php } ?>
+
+                            <?php for ($i = max(1, $page - 2); $i <= min($total_pages, $page + 2); $i++) { ?>
+                                <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
+                                    <a class="page-link" href="?page=<?php echo $i; ?><?php echo !empty($search) ? '&search=' . urlencode($search) : ''; ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php } ?>
+
+                            <?php if ($page < $total_pages) { ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<?php echo $page + 1; ?><?php echo !empty($search) ? '&search=' . urlencode($search) : ''; ?>">Next</a>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </nav>
                 <?php } ?>
             </main>
         </div>
@@ -366,22 +372,22 @@ if(!empty($params)) {
                     <div class="modal-body">
                         <input type="hidden" name="action" value="update">
                         <input type="hidden" name="id" id="customerId">
-                        
+
                         <div class="mb-3">
                             <label for="full_name" class="form-label">Full Name</label>
                             <input type="text" class="form-control" id="full_name" name="full_name" required>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" name="email" required>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="phone" class="form-label">Phone</label>
                             <input type="tel" class="form-control" id="phone" name="phone">
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="address" class="form-label">Address</label>
                             <textarea class="form-control" id="address" name="address" rows="3"></textarea>
@@ -468,7 +474,7 @@ if(!empty($params)) {
             document.getElementById('email').value = customer.email;
             document.getElementById('phone').value = customer.phone;
             document.getElementById('address').value = customer.address;
-            
+
             new bootstrap.Modal(document.getElementById('customerModal')).show();
         }
 
@@ -510,7 +516,7 @@ if(!empty($params)) {
                     </div>
                 </div>
             `;
-            
+
             document.getElementById('viewContent').innerHTML = content;
             new bootstrap.Modal(document.getElementById('viewModal')).show();
         }
@@ -522,4 +528,5 @@ if(!empty($params)) {
         }
     </script>
 </body>
+
 </html>

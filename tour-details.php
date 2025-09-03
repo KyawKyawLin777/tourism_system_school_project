@@ -53,9 +53,9 @@ if (!$tour_details) {
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <h1 class="card-title"><?php echo htmlspecialchars($tour_details['tour_name']); ?></h1>
-                            <span class="badge bg-<?php echo $tour_details['package_type'] == 'Single' ? 'warning' : 'info'; ?> fs-6">
+                            <!-- <span class="badge bg-<?php echo $tour_details['package_type'] == 'Single' ? 'warning' : 'info'; ?> fs-6">
                                 <?php echo $tour_details['package_type']; ?> Package
-                            </span>
+                            </span> -->
                         </div>
 
                         <div class="row mb-4">

@@ -238,7 +238,7 @@ try {
             </div>
         <?php else: ?>
             <div class="table-responsive">
-                <table class="table table-hover">
+                <table class="table table-hover table-striped align-middle text-center">
                     <thead class="table-light">
                         <tr>
                             <th>Booking Details</th>
@@ -247,120 +247,133 @@ try {
                             <th>Amount</th>
                             <th>Status</th>
                             <th>Date</th>
+                            <th>Payment Method</th>
                             <th>Payment Image</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($bookings as $booking): ?>
+                        <?php if (empty($bookings)): ?>
                             <tr>
-                                <td>
-                                    <div>
-                                        <strong><?php echo htmlspecialchars($booking['booking_reference']); ?></strong>
-                                        <br>
+                                <td colspan="9" class="text-center text-muted py-4">No bookings found</td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($bookings as $booking): ?>
+                                <tr>
+                                    <!-- Booking Details -->
+                                    <td class="fw-bold">
+                                        <?php echo htmlspecialchars($booking['booking_reference']); ?><br>
                                         <small class="text-muted">
-                                            <?php echo $booking['number_of_passengers']; ?>
-                                            <?php echo $booking['number_of_passengers'] == 1 ? 'person' : 'people'; ?>
+                                            <?php echo intval($booking['number_of_passengers']); ?>
+                                            <?php echo intval($booking['number_of_passengers']) === 1 ? 'person' : 'people'; ?>
                                         </small>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <strong><?php echo htmlspecialchars($booking['full_name']); ?></strong>
-                                        <br>
-                                        <small class="text-muted">
-                                            <i class="fas fa-envelope me-1"></i>
-                                            <?php echo htmlspecialchars($booking['email']); ?>
-                                        </small>
-                                        <?php if ($booking['phone']): ?>
+                                    </td>
+
+                                    <!-- Customer Info -->
+                                    <td>
+                                        <strong><?php echo htmlspecialchars($booking['full_name']); ?></strong><br>
+                                        <small class="text-muted"><i class="fas fa-envelope me-1"></i><?php echo htmlspecialchars($booking['email']); ?></small>
+                                        <?php if (!empty($booking['phone'])): ?>
                                             <br>
-                                            <small class="text-muted">
-                                                <i class="fas fa-phone me-1"></i>
-                                                <?php echo htmlspecialchars($booking['phone']); ?>
-                                            </small>
+                                            <small class="text-muted"><i class="fas fa-phone me-1"></i><?php echo htmlspecialchars($booking['phone']); ?></small>
                                         <?php endif; ?>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <strong><?php echo htmlspecialchars($booking['tour_name']); ?></strong>
-                                        <br>
+                                    </td>
+
+                                    <!-- Tour Info -->
+                                    <td>
+                                        <strong><?php echo htmlspecialchars($booking['tour_name'] ?? ''); ?></strong><br>
                                         <small class="text-muted">
                                             <i class="fas fa-calendar me-1"></i>
-                                            <?php echo date('M d, Y', strtotime($booking['departure_date'])); ?>
-                                            <?php if ($booking['return_date']): ?>
-                                                - <?php echo date('M d, Y', strtotime($booking['return_date'])); ?>
-                                            <?php endif; ?>
+                                            <?php
+                                            // Safely handle null departure_date
+                                            if (!empty($booking['departure_date'])) {
+                                                echo date('M d, Y', strtotime($booking['departure_date']));
+                                            } else {
+                                                echo 'N/A';
+                                            }
+
+                                            // Safely handle return_date
+                                            if (!empty($booking['return_date'])) {
+                                                echo ' - ' . date('M d, Y', strtotime($booking['return_date']));
+                                            }
+                                            ?>
                                         </small>
-                                    </div>
-                                </td>
-                                <td>
-                                    <strong class="text-success">
-                                        <?php echo number_format($booking['total_amount'], 2); ?> MMK
-                                    </strong>
-                                    <br>
-                                    <small class="text-muted">
-                                        Payment:
-                                        <span class="badge bg-<?php echo $booking['payment_status'] === 'Paid' ? 'success' : 'warning'; ?>">
-                                            <?php echo $booking['payment_status']; ?>
+                                    </td>
+
+
+                                    <!-- Amount -->
+                                    <td>
+                                        <strong class="text-success"><?php echo number_format($booking['total_amount'], 2); ?> MMK</strong><br>
+                                        <small class="text-muted">
+                                            Payment:
+                                            <span class="badge bg-<?php echo $booking['payment_status'] === 'Paid' ? 'success' : 'warning'; ?>">
+                                                <?php echo htmlspecialchars($booking['payment_status']); ?>
+                                            </span>
+                                        </small>
+                                    </td>
+
+                                    <!-- Booking Status -->
+                                    <td>
+                                        <span class="badge bg-<?php
+                                                                echo $booking['booking_status'] === 'Confirmed' ? 'success' : ($booking['booking_status'] === 'Pending' ? 'warning' : 'danger');
+                                                                ?>">
+                                            <?php echo htmlspecialchars($booking['booking_status']); ?>
                                         </span>
-                                    </small>
-                                </td>
-                                <td>
-                                    <span class="badge bg-<?php
-                                                            echo $booking['booking_status'] === 'Confirmed' ? 'success' : ($booking['booking_status'] === 'Pending' ? 'warning' : 'danger');
-                                                            ?>">
-                                        <?php echo $booking['booking_status']; ?>
-                                    </span>
-                                </td>
-                                <td>
-                                    <small>
-                                        <?php echo date('M d, Y', strtotime($booking['booking_date'])); ?>
-                                        <br>
-                                        <?php echo date('H:i', strtotime($booking['booking_date'])); ?>
-                                    </small>
-                                </td>
-                                <td>
-                                    <?php if (!empty($booking['payment_image'])): ?>
-                                        <a href="../<?php echo htmlspecialchars($booking['payment_image']); ?>" target="_blank">
-                                            <img src="../<?php echo htmlspecialchars($booking['payment_image']); ?>"
-                                                class="card-img-top img-fluid"
-                                                alt="Payment Proof"
-                                                style="max-height: 100px; object-fit: cover;">
+                                    </td>
+
+                                    <!-- Date -->
+                                    <td>
+                                        <small>
+                                            <?php echo date('M d, Y', strtotime($booking['booking_date'])); ?><br>
+                                            <?php echo date('H:i', strtotime($booking['booking_date'])); ?>
+                                        </small>
+                                    </td>
+
+                                    <!-- Payment Method -->
+                                    <td><?php echo htmlspecialchars($booking['payment_method'] ?? ''); ?></td>
+
+
+                                    <!-- Payment Image -->
+                                    <td>
+                                        <?php if (!empty($booking['payment_image'])): ?>
+                                            <a href="../<?php echo htmlspecialchars($booking['payment_image']); ?>" target="_blank">
+                                                <img src="../<?php echo htmlspecialchars($booking['payment_image']); ?>"
+                                                    class="img-fluid rounded shadow-sm"
+                                                    style="max-height: 80px; object-fit: cover;"
+                                                    alt="Payment Proof">
+                                            </a>
+                                        <?php else: ?>
+                                            <span class="text-muted">No proof</span>
+                                        <?php endif; ?>
+                                    </td>
+
+                                    <!-- Actions -->
+                                    <td>
+                                        <?php if ($booking['booking_status'] === 'Pending'): ?>
+                                            <div class="d-flex flex-column gap-1">
+                                                <button class="btn btn-success btn-sm"
+                                                    onclick="showApprovalModal(<?php echo $booking['id']; ?>, 'approve', '<?php echo htmlspecialchars($booking['full_name']); ?>')">
+                                                    <i class="fas fa-check me-1"></i>Approve
+                                                </button>
+                                                <button class="btn btn-danger btn-sm"
+                                                    onclick="showApprovalModal(<?php echo $booking['id']; ?>, 'reject', '<?php echo htmlspecialchars($booking['full_name']); ?>')">
+                                                    <i class="fas fa-times me-1"></i>Reject
+                                                </button>
+                                            </div>
+                                        <?php else: ?>
+                                            <span class="text-muted"><i class="fas fa-check-circle me-1"></i>Processed</span>
+                                        <?php endif; ?>
+                                        <a href="booking.php?id=<?php echo $booking['id']; ?>" class="btn btn-outline-info btn-sm mt-1">
+                                            <i class="fas fa-eye me-1"></i>Details
                                         </a>
-
-                                    <?php else: ?>
-                                        <span class="text-muted">No proof</span>
-                                    <?php endif; ?>
-                                </td>
-
-                                <td>
-                                    <?php if ($booking['booking_status'] === 'Pending'): ?>
-                                        <div class="btn-group-vertical btn-group-sm">
-                                            <button class="btn btn-success btn-sm"
-                                                onclick="showApprovalModal(<?php echo $booking['id']; ?>, 'approve', '<?php echo htmlspecialchars($booking['full_name']); ?>')">
-                                                <i class="fas fa-check me-1"></i>Approve
-                                            </button>
-                                            <button class="btn btn-danger btn-sm"
-                                                onclick="showApprovalModal(<?php echo $booking['id']; ?>, 'reject', '<?php echo htmlspecialchars($booking['full_name']); ?>')">
-                                                <i class="fas fa-times me-1"></i>Reject
-                                            </button>
-                                        </div>
-                                    <?php else: ?>
-                                        <span class="text-muted">
-                                            <i class="fas fa-check-circle me-1"></i>Processed
-                                        </span>
-                                    <?php endif; ?>
-                                    <br>
-                                    <a href="booking.php?id=<?php echo $booking['id']; ?>"
-                                        class="btn btn-outline-info btn-sm mt-1">
-                                        <i class="fas fa-eye me-1"></i>Details
-                                    </a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </tbody>
                 </table>
+
+
             </div>
         <?php endif; ?>
     </div>
